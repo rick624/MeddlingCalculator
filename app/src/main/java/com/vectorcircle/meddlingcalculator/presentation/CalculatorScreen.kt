@@ -14,6 +14,9 @@ import com.vectorcircle.meddlingcalculator.domain.ButtonAction
 import com.vectorcircle.meddlingcalculator.domain.MathOperation
 import com.vectorcircle.meddlingcalculator.ui.theme.MeddlingCalculatorTheme
 import com.vectorcircle.meddlingcalculator.ui.theme.backgroundGray
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @Composable
 fun CalculatorScreen(
@@ -37,6 +40,7 @@ fun CalculatorScreen(
 @Preview
 @Composable
 fun CalculatorScreenPreview() {
+    val sdf = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.TAIWAN)
     MeddlingCalculatorTheme {
         var state = CalculatorState()
         state = state.copy(
@@ -45,7 +49,13 @@ fun CalculatorScreenPreview() {
             number2 = "3.14",
             operation = MathOperation.Multiplication,
             currentEquation = "3 x 3.14",
-            equations = listOf("7 x 7 = 49", "16 ÷ 2 = 8", "1 + 2 = 3")
+//            equations = listOf("7 x 7 = 49", "16 ÷ 2 = 8", "1 + 2 = 3")
+            equations = listOf<Notes>(
+                Notes("7 x 7 = 49", 1, "First calculate", sdf.format(Date())),
+                Notes("7 x 8 = 56", 2, "Second calculate", sdf.format(Date())),
+                Notes("7 x 9 = 63", 3, "Third calculate", sdf.format(Date())),
+                Notes("9 x 9 = 81", 4, "Fourth calculate", sdf.format(Date())),
+            )
         )
         CalculatorScreen(state = state, onButtonPress = {})
     }

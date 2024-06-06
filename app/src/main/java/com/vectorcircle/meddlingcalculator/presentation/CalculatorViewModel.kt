@@ -1,14 +1,25 @@
 package com.vectorcircle.meddlingcalculator.presentation
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.vectorcircle.meddlingcalculator.domain.ButtonAction
 import com.vectorcircle.meddlingcalculator.domain.MathOperation
+import java.text.SimpleDateFormat
+import java.time.Duration
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.util.Locale
 
 class CalculatorViewModel: ViewModel() {
     var state by mutableStateOf(CalculatorState())
+    private val equations = mutableListOf<Notes>()
+//    val sdf = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.TAIWAN)
+
 
     fun onButton(action: ButtonAction) {
         when(action) {
@@ -75,8 +86,13 @@ class CalculatorViewModel: ViewModel() {
     }
 
     private fun calculate() {
+        val now = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")
         val operand1 = state.number1.toDoubleOrNull()
         val operand2 = state.number2.toDoubleOrNull()
+
+//        val sdf = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.TAIWAN)
+//        Log.d("CurrentTime", "${Date.from(Instant.now())}")
 
         if (operand1 != null && operand2 != null) {
             val result: Double
@@ -100,14 +116,20 @@ class CalculatorViewModel: ViewModel() {
                 }
                 else -> return
             }
+/*            equations.add(Notes(equation, System.currentTimeMillis().toInt(), "test", sdf.format(
+                Date()
+            )))*/
+            equations.add(Notes(equation, System.currentTimeMillis().toInt(), "test", formatter.format(now)))
             state = state.copy(
                 displayNumber = dropZerosAfterDecimal(result),
                 currentEquation = "",
                 operation = null,
                 number1 = "",
                 number2 = "",
-                equations = state.equations + equation
+//                equations = equations.add(Notes(equation, System.currentTimeMillis().toInt(), "test", "time"))
+                equations = equations
             )
+            Log.d("HistoryItem", "${equations.size} " + "${equation}")
         }
     }
 
